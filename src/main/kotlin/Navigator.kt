@@ -13,6 +13,7 @@ class Navigator(private val scanner: Scanner) {
 
             if (scanner.hasNextInt()) {
                 val choice = scanner.nextInt()
+                scanner.nextLine()
                 if (choice in 0..options.size) {
                     return choice
                 } else {
@@ -27,7 +28,6 @@ class Navigator(private val scanner: Scanner) {
 
     fun getInput(message: String): String {
         println(message)
-        scanner.nextLine()
         return scanner.nextLine()
     }
 }

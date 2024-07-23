@@ -1,6 +1,6 @@
 class ArchiveManager(private val navigator: Navigator) {
 
-    fun openArchive(archive: MutableSet<String>) {
+    fun openArchive(archive: Archive) {
 
         while (true) {
             val choice = navigator.chooseOption(
@@ -11,28 +11,34 @@ class ArchiveManager(private val navigator: Navigator) {
 
             when (choice) {
                 1 -> {
+                    val noteTitle = navigator.getInput("Enter the note title:")
+                    if (noteTitle.isBlank()) {
+                        println("Note title cannot be empty. Please try again.")
+                    }
+
                     val noteContent = navigator.getInput("Enter the note content:")
                     if (noteContent.isBlank()) {
                         println("Note content cannot be empty. Please try again.")
-                    } else {
-                        archive.add(noteContent)
-                        println("Note added.")
                     }
+                    archive.notes.add(Note(noteTitle, noteContent))
+                    println("Note \"$noteTitle\" added.")
                 }
 
                 2 -> {
-                    if (archive.isEmpty()) {
+                    if (archive.notes.isEmpty()) {
                         println("The list of notes is empty.")
                     } else {
-                        val noteChoice = navigator.chooseOption(
-                            archive.toList(),
+                        val noteTitle = archive.notes.map { it.title }
+                        val noteContent = navigator.chooseOption(
+                            noteTitle,
                             "List of notes:",
                             "Go back"
                         )
 
-                        if (noteChoice != 0) {
-                            val note = archive.elementAt(noteChoice - 1)
-                            println("Note content: $note")
+                        if (noteContent != 0) {
+                            val note = archive.notes.elementAt(noteContent - 1)
+                            println("Note title: ${note.title}")
+                            println("Note content: ${note.content}")
                         }
                     }
                 }
@@ -42,3 +48,4 @@ class ArchiveManager(private val navigator: Navigator) {
         }
     }
 }
+

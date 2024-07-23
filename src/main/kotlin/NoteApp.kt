@@ -1,6 +1,6 @@
 class NoteApp(private val navigator: Navigator, private val archiveManager: ArchiveManager) {
 
-    private val notes = mutableListOf<Pair<String, MutableSet<String>>>()
+    private val archives = mutableListOf<Archive>()
 
     fun run() {
 
@@ -17,23 +17,23 @@ class NoteApp(private val navigator: Navigator, private val archiveManager: Arch
                     if (archiveName.isBlank()) {
                         println("Archive name cannot be empty. Please try again.")
                     } else {
-                        notes.add(archiveName to mutableSetOf())
+                        archives.add(Archive(archiveName))
                         println("Archive \"$archiveName\" created.")
                     }
                 }
 
                 2 -> {
-                    if (notes.isEmpty()) {
+                    if (archives.isEmpty()) {
                         println("The list of archives is empty.")
                     } else {
                         val archiveChoice = navigator.chooseOption(
-                            notes.map { it.first },
+                            archives.map { it.name },
                             "List of archives:",
                             "Go back"
                         )
 
                         if (archiveChoice != 0) {
-                            val (_, archive) = notes[archiveChoice - 1]
+                            val archive = archives[archiveChoice - 1]
                             archiveManager.openArchive(archive)
                         }
                     }
